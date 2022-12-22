@@ -49,7 +49,7 @@ const signInSchema = joi.object({
     password: joi.string().required()
 })
 
-export async function validateSignIn(req, res, next) {
+export async function validateSignIn (req, res, next) {
     const validation = signInSchema.validate(req.body)
     
     if (validation.error) {

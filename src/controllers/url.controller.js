@@ -20,12 +20,15 @@ export async function postUrl (req, res) {
 
 export async function getUrl (req, res) {
     const id = req.params.id
-    const resObj = await getUrlById(id)
 
-    if (!resObj.rows[0]) {
-        res.sendStatus(404)
-        return
+    try {
+        const url = await getUrlById(id)
+        res.status(200).send(url.rows[0])
+    } catch (err) {
+        res.status(500).send(err.message)
     }
-    
-    res.send(resObj.rows[0])
+}
+
+export async function openShortUrl (req, res) {
+    res.send("TEST")
 }

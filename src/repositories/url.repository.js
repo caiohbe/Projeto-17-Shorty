@@ -11,3 +11,7 @@ export function insertUrl(userId, url, shortUrl) {
 export function getUrlById(id) {
     return connectionDB.query('SELECT id, "shortUrl", url FROM urls WHERE id=$1;', [id])
 }
+
+export function getUrlByShortUrl(shortUrl) {
+    return connectionDB.query('SELECT url FROM urls WHERE "shortUrl"=$1;', [shortUrl])
+}
