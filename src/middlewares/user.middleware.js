@@ -26,7 +26,7 @@ export async function validateSignUp (req, res, next) {
 
     const user = await getUser(email)
 
-    if (!user.rows.length === 0) {
+    if (user.rows.length !== 0) {
         res.sendStatus(409)
         return
     }
