@@ -61,7 +61,7 @@ export async function validateSignIn (req, res, next) {
     const { email, password } = req.body
 
     try {
-        const user = await getUser(email)
+        const user = await getUserByEmail(email)
 
         if (!user.rows[0] || !bcrypt.compareSync(password, user.rows[0].password)) {
             res.sendStatus(401)

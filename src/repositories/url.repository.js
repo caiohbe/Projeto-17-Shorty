@@ -15,3 +15,11 @@ export function getUrlById(id) {
 export function getUrlByShortUrl(shortUrl) {
     return connectionDB.query('SELECT url FROM urls WHERE "shortUrl"=$1;', [shortUrl])
 }
+
+export function deleteUrlById(id) {
+    return connectionDB.query("DELETE FROM urls WHERE id=$1;", [id])
+}
+
+export function getUrlUserIdById(id) {
+    return connectionDB.query('SELECT "userId" FROM urls WHERE id=$1;', [id])
+}

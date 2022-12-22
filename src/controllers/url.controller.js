@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { getUserIdByToken } from "../repositories/user.repository.js";
-import { insertUrl, getUrlById } from "../repositories/url.repository.js";
+import { insertUrl, getUrlById, deleteUrlById } from "../repositories/url.repository.js";
 
 export async function postUrl (req, res) {
     const shortUrl = nanoid()
@@ -31,4 +31,17 @@ export async function getUrl (req, res) {
 
 export async function openShortUrl (req, res) {
     res.send("TEST")
+}
+
+export async function deleteUrl (req, res) {
+    const id = req.params.id
+
+    try {
+        await deleteUrlById(id)
+        res.sendStatus(204)
+        return
+
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
 }
