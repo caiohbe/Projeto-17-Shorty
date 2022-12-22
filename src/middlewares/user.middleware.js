@@ -1,5 +1,6 @@
 import joi from "joi"
 import { getUser } from "../repository/user.repository.js"
+import bcrypt from "bcrypt"
 
 const newUserSchema = joi.object({
     name: joi.string().required(),
@@ -29,6 +30,37 @@ export async function validateSignUp (req, res, next) {
     if (user.rows.length !== 0) {
         res.sendStatus(409)
         return
+    }
+
+    next()
+}
+
+
+const signInSchema = joi.object({
+    email: joi.string().email().required(),
+    password: joi.string().required()
+})
+
+export async function validateSignIn(req, res, next) {
+    const validation = signInSchema.validate(req.body)
+    
+    if (validation.error) {
+        const errors = validation.error.details.map((d) => d.message)
+        res.status(422).send(errors)
+        return
+    }
+    
+    const { email, password } = req.body
+
+    try {
+        const user = await getUser(email)
+
+        if (!user.rows[0] || !bcrypt.compareSync(password, user.rows[0].password)) {
+            res.sendStatus(401)
+            return
+        }
+    } catch (err) {
+        res.status(500).send(err.message)
     }
 
     next()
