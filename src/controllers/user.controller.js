@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { insertUser, getUserId, insertToken } from "../repository/user.repository.js"
+import { insertUser, getUserIdByEmail, insertToken } from "../repositories/user.repository.js"
 import { v4 as uuid } from 'uuid';
 
 export async function postSignUp (req, res) {
@@ -19,7 +19,7 @@ export async function postSignIn (req, res) {
     const token = uuid()
 
     try {
-        const userId = await getUserId(email)
+        const userId = await getUserIdByEmail(email)
         await insertToken(userId.rows[0].id, token)
         res.status(200).send(token)
     } catch (err) {

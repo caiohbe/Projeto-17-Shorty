@@ -1,5 +1,5 @@
 import joi from "joi"
-import { getUser } from "../repository/user.repository.js"
+import { getUserByEmail } from "../repositories/user.repository.js"
 import bcrypt from "bcrypt"
 
 const newUserSchema = joi.object({
@@ -25,12 +25,20 @@ export async function validateSignUp (req, res, next) {
         return
     }
 
-    const user = await getUser(email)
+    try {
+        const user = await getUserByEmail(email)
 
-    if (user.rows.length !== 0) {
-        res.sendStatus(409)
+        if (user.rows.length !== 0) {
+            res.sendStatus(409)
+            return
+        }
+        
+    } catch (err) {
+        res.status(500).send(err.message)
         return
     }
+
+    
 
     next()
 }

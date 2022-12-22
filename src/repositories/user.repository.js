@@ -1,11 +1,15 @@
 import connectionDB from "../database/db.js"
 
-export function getUser(email) {
+export function getUserByEmail(email) {
     return connectionDB.query("SELECT * FROM users WHERE email=$1;", [email])
 }
 
-export function getUserId(email) {
+export function getUserIdByEmail(email) {
     return connectionDB.query("SELECT id FROM users WHERE email=$1;", [email])
+}
+
+export function getUserIdByToken(token) {
+    return connectionDB.query('SELECT "userId" FROM sessions WHERE token=$1;', [token])
 }
 
 export function insertUser(name, email, password) {
