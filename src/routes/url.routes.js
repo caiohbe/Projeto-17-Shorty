@@ -1,11 +1,11 @@
 import { Router } from "express";
 import validateUrl from "../middlewares/url.middleware.js";
-import { postUrl } from "../controllers/url.controller.js";
+import { getUrl, postUrl } from "../controllers/url.controller.js";
 
 const router = Router()
 
 router.post("/urls/shorten", validateUrl, postUrl)
-router.get("/urls/:id")
+router.get("/urls/:id", getUrl)
 router.get("/urls/open/:shorturl")
 router.get("/users/me")
 router.delete("/ranking")
