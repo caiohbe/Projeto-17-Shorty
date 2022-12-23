@@ -19,3 +19,7 @@ export function insertUser(name, email, password) {
 export function insertToken(userId, token) {
     return connectionDB.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2);', [userId, token])
 }
+
+export function getUserStatsById(id) {
+    return connectionDB.query('SELECT id, name FROM users WHERE id=$1;', [id])
+}

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt"
-import { insertUser, getUserIdByEmail, insertToken } from "../repositories/user.repository.js"
+import { insertUser, getUserIdByEmail, insertToken, getUserIdByToken, getUserStatsById } from "../repositories/user.repository.js"
 import { v4 as uuid } from 'uuid';
+import { getUrlsByUserId, getUrlUserIdById } from "../repositories/url.repository.js";
 
 export async function postSignUp (req, res) {
     const { name, email } = req.body
@@ -28,5 +29,34 @@ export async function postSignIn (req, res) {
 }
 
 export async function getMyUser (req, res) {
-    
+    const token = req.headers.authorization?.replace("Bearer ", "")
+
+    try {
+        const user = await getUserIdByToken(token)
+        const userId = user.rows[0].userId
+
+        const myUrls = await getUrlsByUserId(userId)
+
+        const userStats = await getUserStatsById(userId)
+        const { id, name } = userStats.rows[0]
+        const shortenedUrls = myUrls.rows
+
+        let visitCount = 0
+
+        shortenedUrls.forEach((url) => {
+            visitCount += url.visitCount
+        })
+
+        const resObj = {
+            id,
+            name,
+            visitCount,
+            shortenedUrls
+        }
+
+        res.send(resObj)
+        
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
 }
