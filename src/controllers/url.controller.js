@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { getUserIdByToken } from "../repositories/user.repository.js";
-import { insertUrl, getUrlById, deleteUrlById } from "../repositories/url.repository.js";
+import { insertUrl, getUrlById, deleteUrlById, updateVisitCountByShortUrl, getUrlByShortUrl } from "../repositories/url.repository.js";
 
 export async function postUrl (req, res) {
     const shortUrl = nanoid()
@@ -30,7 +30,18 @@ export async function getUrl (req, res) {
 }
 
 export async function openShortUrl (req, res) {
-    res.send("TEST")
+    const shortUrl = req.params.shortUrl
+
+    try {
+        await updateVisitCountByShortUrl(shortUrl)
+        
+        const url = await getUrlByShortUrl(shortUrl)
+        const urlRedirection = url.rows[0].url
+        console.log(urlRedirection)
+        return res.redirect(urlRedirection)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
 }
 
 export async function deleteUrl (req, res) {

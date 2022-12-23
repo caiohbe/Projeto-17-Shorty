@@ -27,3 +27,7 @@ export function getUrlUserIdById(id) {
 export function getUrlsByUserId(userId) {
     return connectionDB.query('SELECT id, "shortUrl", "url", "visitCount" FROM urls WHERE "userId"=$1;', [userId])
 }
+
+export function updateVisitCountByShortUrl(shortUrl) {
+    return connectionDB.query('UPDATE urls SET "visitCount"="visitCount"+1 WHERE "shortUrl"=$1;', [shortUrl])
+}
