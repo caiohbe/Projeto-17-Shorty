@@ -9,17 +9,5 @@ app.use(express.json())
 app.use(userRouters)
 app.use(urlRouters)
 
-/*
-app.get('/teste', async(req, res) => {
-    try {
-        const teste = await connectionDB.query('select * from users;')
-
-        res.send(teste.rows)
-    } catch (err) {
-        console.log(err)
-    }
-})
-*/
-
-const port = 4000
+const port = process.env.PORT || 4000
 app.listen(port, () => console.log(`Server running in port ${port}`))

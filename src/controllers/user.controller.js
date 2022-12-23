@@ -26,3 +26,7 @@ export async function postSignIn (req, res) {
         res.status(500).send(err.message)
     }
 }
+
+export async function getMyUser (req, res) {
+    
+}

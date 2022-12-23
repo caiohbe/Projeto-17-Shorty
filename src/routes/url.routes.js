@@ -7,8 +7,6 @@ const router = Router()
 router.post("/urls/shorten", validateUrl, validateToken, postUrl)
 router.get("/urls/:id", validateUrlParams, getUrl)
 router.get("/urls/open/:shortUrl", validateShortUrlParams, openShortUrl)
-router.get("/users/me")
 router.delete("/urls/:id", validateToken, validateDelete, deleteUrl)
-router.get("/ranking")
 
 export default router

@@ -6,5 +6,7 @@ const router = Router()
 
 router.post("/signup", validateSignUp, postSignUp)
 router.post("/signin", validateSignIn, postSignIn)
+router.get("/users/me")
+router.get("/ranking")
 
 export default router
