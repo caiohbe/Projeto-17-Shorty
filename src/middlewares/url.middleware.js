@@ -82,6 +82,11 @@ export async function validateDelete (req, res, next) {
     try {
         const userId = await getUserIdByToken(token)
         const urlUserId = await getUrlUserIdById(id)
+        
+        if (!urlUserId.rows[0]) {
+            res.sendStatus(404)
+            return
+        }
 
         if (userId.rows[0].userId !== urlUserId.rows[0].userId) {
             res.sendStatus(401)

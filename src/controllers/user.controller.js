@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt"
-import { insertUser, getUserIdByEmail, insertToken, getUserIdByToken, getUserStatsById } from "../repositories/user.repository.js"
+import { insertUser, getUserIdByEmail, insertToken, getUserIdByToken, getUserStatsById, getRankingQuery } from "../repositories/user.repository.js"
 import { v4 as uuid } from 'uuid';
-import { getUrlsByUserId, getUrlUserIdById } from "../repositories/url.repository.js";
+import { getUrlsByUserId } from "../repositories/url.repository.js";
 
 export async function postSignUp (req, res) {
     const { name, email } = req.body
@@ -56,6 +56,15 @@ export async function getMyUser (req, res) {
 
         res.send(resObj)
         
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
+
+export async function getRanking (req, res) {
+    try {
+        const ranking = await getRankingQuery()
+        res.send(ranking.rows).status(200);
     } catch (err) {
         res.status(500).send(err.message)
     }

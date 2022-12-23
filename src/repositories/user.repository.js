@@ -23,3 +23,21 @@ export function insertToken(userId, token) {
 export function getUserStatsById(id) {
     return connectionDB.query('SELECT id, name FROM users WHERE id=$1;', [id])
 }
+
+export function getRankingQuery() {
+    return connectionDB.query(`
+        SELECT us.id, us.name, 
+        CASE WHEN COUNT(ur.*) = 0 THEN 0
+        ELSE COUNT(ur.*) 
+        END AS "linksCount", 
+        CASE WHEN COUNT(ur.*) = 0 THEN 0 
+        ELSE SUM(ur."visitCount") 
+        END AS "visitCount" 
+        FROM users AS us 
+        LEFT JOIN urls AS ur 
+        ON ur."userId" = us.id 
+        GROUP BY us.id 
+        ORDER BY "visitCount" DESC, "linksCount" DESC
+        LIMIT 10;`
+    )
+}
